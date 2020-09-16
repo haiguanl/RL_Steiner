@@ -4,6 +4,7 @@ import argparse
 import matplotlib.pyplot as plt
 
 import numpy as np
+import os
 
 import torch
 from torch.autograd import Variable
@@ -118,7 +119,7 @@ def main(config,
                     correct += 1
                 total += 1
                 if config.plot == True:
-                    visualize(G.image.T, states_xy[i], pred_traj)
+                    visualize(G.image.T, states_xy[i], pred_traj,dom)
         sys.stdout.write("\r" + str(int(
             (float(dom) / n_domains) * 100.0)) + "%")
         sys.stdout.flush()
@@ -126,7 +127,7 @@ def main(config,
     print('Rollout Accuracy: {:.2f}%'.format(100 * (correct / total)))
 
 
-def visualize(dom, states_xy, pred_traj):
+def visualize(dom, states_xy, pred_traj,dom_num):
     fig, ax = plt.subplots()
     implot = plt.imshow(dom, cmap="Greys_r")
     ax.plot(states_xy[:, 0], states_xy[:, 1], c='b', label='Optimal Path')
@@ -140,7 +141,10 @@ def visualize(dom, states_xy, pred_traj):
     for label in legend.get_lines():
         label.set_linewidth(0.5)  # the legend line width
     plt.draw()
-    plt.waitforbuttonpress(0)
+    if not os.path.exists('visualize/'):
+        os.mkdir('visualize/')
+    plt.savefig('visualize/Dom%s.png'%(dom_num))
+    # plt.waitforbuttonpress(0)
     plt.close(fig)
 
 

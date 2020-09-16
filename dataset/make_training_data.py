@@ -113,4 +113,4 @@ def main(dom_size=[28, 28],
 
 
 if __name__ == '__main__':
-    main()
+    main(dom_size = [16, 16])
